@@ -40,7 +40,6 @@ export class WorkspacesController {
     @Body() createWorkspaceDto: CreateWorkspaceDto,
     @GetUser() user: User,
   ): Promise<Workspace> {
-    console.log(user);
     return this.workspacesService.createWorkspace(createWorkspaceDto, user);
   }
 }

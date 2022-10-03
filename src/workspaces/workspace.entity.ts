@@ -22,5 +22,5 @@ export class Workspace extends BaseEntity {
   user: User;
 
   @Column()
-  createdByUserId: number;
+  userId: number;
 }
