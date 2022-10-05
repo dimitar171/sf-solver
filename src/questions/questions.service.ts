@@ -1,15 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateQuestionDto } from './dto/create-question.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../auth/user.entity';
 import { Repository } from 'typeorm';
+import { User } from '../auth/user.entity';
+import { CreateQuestionDto } from './dto/request/create-question.dto';
+import { CreateQuestionResponseDto } from './dto/response/create-question-response.dto';
 import { Question } from './question.entity';
 
 @Injectable()
 export class QuestionsService {
   constructor(@InjectRepository(Question) private repo: Repository<Question>) {}
 
-  async createQuestion(questionDto: CreateQuestionDto, user: User, id: number) {
+  async createQuestion(
+    questionDto: CreateQuestionDto,
+    user: User,
+    id: number,
+  ): Promise<CreateQuestionResponseDto> {
     const { title, description } = questionDto;
     const question = new Question();
     question.title = title;
@@ -17,7 +22,11 @@ export class QuestionsService {
     question.workspace = user.workspaces[id - 1];
     question.workspace.user = user;
     await this.repo.save(question);
-    return question;
+    return {
+      id: question.id,
+      workspaceId: question.workspace.id,
+      userId: question.workspace.user.id,
+    };
   }
 
   async getQuestionById(id: number) {

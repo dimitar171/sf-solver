@@ -12,7 +12,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
-import { CreateQuestionDto } from './dto/create-question.dto';
+import { CreateQuestionDto } from './dto/request/create-question.dto';
+import { CreateQuestionResponseDto } from './dto/response/create-question-response.dto';
 import { Question } from './question.entity';
 import { QuestionsService } from './questions.service';
 
@@ -40,7 +41,7 @@ export class QuestionsController {
     @Body() createQuestionDto: CreateQuestionDto,
     @Param('workspaceId', ParseIntPipe) id: number,
     @GetUser() user: User,
-  ): Promise<Question> {
+  ): Promise<CreateQuestionResponseDto> {
     return this.questionsService.createQuestion(createQuestionDto, user, id);
   }
 }
