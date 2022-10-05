@@ -1,9 +1,11 @@
+import { Question } from 'src/questions/question.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../auth/user.entity';
 
@@ -19,8 +21,13 @@ export class Workspace extends BaseEntity {
   description: string;
 
   @ManyToOne(() => User, (user) => user.workspaces, { eager: false })
+  //join column
   user: User;
-
   @Column()
   userId: number;
+
+  @OneToMany(() => Question, (question) => question.workspace, {
+    eager: true,
+  })
+  questions: Question[];
 }

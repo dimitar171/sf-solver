@@ -21,9 +21,14 @@ import { WorkspacesService } from './workspaces.service';
 export class WorkspacesController {
   constructor(private workspacesService: WorkspacesService) {}
 
+  @Get('/all')
+  getAllWorkspaces(): Promise<Workspace[]> {
+    return this.workspacesService.getAllWorkspaces();
+  }
+
   @Get()
-  getWorkspaces(@GetUser() user: User): Promise<Workspace[]> {
-    return this.workspacesService.getWorkspaces(user);
+  getUserWorkspaces(@GetUser() user: User): Promise<Workspace[]> {
+    return this.workspacesService.getUserWorkspaces(user);
   }
 
   @Get('/:id')
@@ -41,5 +46,10 @@ export class WorkspacesController {
     @GetUser() user: User,
   ): Promise<Workspace> {
     return this.workspacesService.createWorkspace(createWorkspaceDto, user);
+  }
+
+  @Post('/:id/join')
+  joinWorkspace(@GetUser() user: User): Promise<Workspace> {
+    return this.workspacesService.joinWorkspace(user);
   }
 }

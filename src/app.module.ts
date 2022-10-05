@@ -5,13 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/user.entity';
 import { Workspace } from './workspaces/workspace.entity';
+import { Question } from './questions/question.entity';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [User, Workspace],
+      entities: [User, Workspace, Question],
       synchronize: true,
       // type: 'postgres',
       // host: 'localhost',
@@ -24,6 +26,7 @@ import { Workspace } from './workspaces/workspace.entity';
     }),
     WorkspacesModule,
     AuthModule,
+    QuestionsModule,
   ],
 })
 export class AppModule {}

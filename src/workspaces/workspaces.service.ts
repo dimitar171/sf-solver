@@ -32,10 +32,20 @@ export class WorkspacesService {
     return found;
   }
 
-  async getWorkspaces(user: User) {
+  async getAllWorkspaces() {
+    const workspace = this.repo.find();
+    return workspace;
+  }
+
+  async getUserWorkspaces(user: User) {
     const query = this.repo.createQueryBuilder('workspace');
     query.where('workspace.userId = :userId', { userId: user.id });
     const workspace = await query.getMany();
+    return workspace;
+  }
+
+  async joinWorkspace(user: User) {
+    const workspace = new Workspace();
     return workspace;
   }
 }
