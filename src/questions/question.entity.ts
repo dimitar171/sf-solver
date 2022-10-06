@@ -1,4 +1,4 @@
-import { Workspace } from 'src/workspaces/workspace.entity';
+import { Workspace } from '../workspaces/workspace.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()

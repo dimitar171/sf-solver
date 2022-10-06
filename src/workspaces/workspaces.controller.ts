@@ -11,13 +11,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../auth/user.entity';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from '../auth/get-user.decorator';
 import { Workspace } from './workspace.entity';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { WorkspacesService } from './workspaces.service';
 
 @Controller('workspaces')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class WorkspacesController {
   constructor(private workspacesService: WorkspacesService) {}
 

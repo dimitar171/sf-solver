@@ -10,8 +10,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 import { CreateQuestionDto } from './dto/request/create-question.dto';
 import { CreateQuestionResponseDto } from './dto/response/create-question-response.dto';
 import { Question } from './question.entity';

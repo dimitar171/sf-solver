@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 
-describe('AppController (e2e)', () => {
+describe('Workspaces', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,10 +15,17 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('gets all workspaces', async () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .get('/workspaces/all')
+      .expect(401)
+      .then((res) => {
+        const workspaces = res.body;
+        expect(workspaces).toBeDefined();
+        expect(workspaces).toEqual({
+          message: 'Unauthorized',
+          statusCode: 401,
+        }); //just for test, we need to authorize
+      });
   });
 });
