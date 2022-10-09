@@ -18,16 +18,31 @@ import { WorkspacesService } from './workspaces.service';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @Controller('workspaces')
 @ApiTags('workspaces')
 @ApiBearerAuth('JWT-auth')
+@ApiUnauthorizedResponse({ description: 'Invalid credentials' })
 @UseGuards(AuthGuard('jwt'))
 export class WorkspacesController {
   constructor(private workspacesService: WorkspacesService) {}
+
+  @Post()
+  @ApiCreatedResponse({ description: 'Create workspace' })
+  @ApiResponse({ status: 409, description: 'Duplicated workspace title' })
+  @UsePipes(ValidationPipe)
+  createWorkspace(
+    @Body() createWorkspaceDto: CreateWorkspaceDto,
+    @GetUser() user: User,
+  ): Promise<Workspace> {
+    return this.workspacesService.createWorkspace(createWorkspaceDto, user);
+  }
 
   @Get('/all')
   @ApiOkResponse({ description: 'Get all workspaces' })
@@ -43,6 +58,7 @@ export class WorkspacesController {
 
   @Get('/:id')
   @ApiOkResponse({ description: 'Get workspace by Id' })
+  @ApiNotFoundResponse({ description: 'Workspace not found' })
   getWorkspaceById(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
@@ -50,18 +66,8 @@ export class WorkspacesController {
     return this.workspacesService.getWorkspaceById(id, user);
   }
 
-  @Post()
-  @ApiCreatedResponse({ description: 'Create workspace' })
-  @UsePipes(ValidationPipe)
-  createWorkspace(
-    @Body() createWorkspaceDto: CreateWorkspaceDto,
-    @GetUser() user: User,
-  ): Promise<Workspace> {
-    return this.workspacesService.createWorkspace(createWorkspaceDto, user);
-  }
-
   @Post('/:id/join')
-  @ApiCreatedResponse({ description: 'Eegister to a workspace' })
+  @ApiOkResponse({ description: 'Register to a workspace' })
   joinWorkspace(@GetUser() user: User): Promise<Workspace> {
     return this.workspacesService.joinWorkspace(user);
   }

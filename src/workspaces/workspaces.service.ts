@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../auth/user.entity';
@@ -17,7 +22,15 @@ export class WorkspacesService {
     workspace.title = title;
     workspace.description = description;
     workspace.user = user;
-    await this.repo.save(workspace);
+    const exists = await this.repo.findOneBy({ title });
+    if (exists) {
+      throw new ConflictException('Workspace title already exists');
+    }
+    try {
+      await this.repo.save(workspace);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
     delete workspace.user;
     return workspace;
   }

@@ -5,6 +5,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -13,16 +14,17 @@ import {
 @ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-  //create a User
+
   @Post('/signup')
-  @ApiCreatedResponse({ description: 'User Registration' })
+  @ApiCreatedResponse({ description: 'User is registered' })
+  @ApiResponse({ status: 409, description: 'Duplicated User' })
   @ApiBody({ type: CreateUserDto })
   signUp(@Body(ValidationPipe) createUserDto: CreateUserDto): Promise<void> {
     return this.authService.signUp(createUserDto);
   }
-  //Login a user a User
+
   @Post('/signin')
-  @ApiOkResponse({ description: 'User Registration' })
+  @ApiOkResponse({ description: 'User is signed in' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBody({ type: CreateUserDto })
   signIn(

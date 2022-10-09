@@ -1,5 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Workspace } from 'src/workspaces/workspace.entity';
 import { Repository } from 'typeorm';
 import { User } from '../auth/user.entity';
 import { CreateQuestionDto } from './dto/request/create-question.dto';
@@ -8,42 +14,86 @@ import { Question } from './question.entity';
 
 @Injectable()
 export class QuestionsService {
-  constructor(@InjectRepository(Question) private repo: Repository<Question>) {}
+  constructor(
+    @InjectRepository(Question) private questionRepo: Repository<Question>,
+    @InjectRepository(Workspace) private workspaceRepo: Repository<Workspace>,
+  ) {}
 
   async createQuestion(
-    questionDto: CreateQuestionDto,
+    workspaceId: number,
     user: User,
-    id: number,
-  ): Promise<CreateQuestionResponseDto> {
-    const { title, description } = questionDto;
-    const question = new Question();
-    question.title = title;
-    question.description = description;
-    question.workspace = user.workspaces[id - 1];
-    question.workspace.user = user;
-    await this.repo.save(question);
-    return {
-      id: question.id,
-      workspaceId: question.workspace.id,
-      userId: question.workspace.user.id,
-    };
-  }
-
-  async getQuestionById(id: number) {
-    const found = await this.repo.findOne({
-      where: { id },
+    data: CreateQuestionDto,
+  ) {
+    const workspace = await this.workspaceRepo.findOne({
+      where: { id: workspaceId },
     });
-    if (!found) {
-      throw new NotFoundException(`Workspace with ID "${id}" not found`);
+    if (!workspace) {
+      throw new NotFoundException(
+        `Workspace with ID "${workspaceId}" not found`,
+      );
     }
-    return found;
+    const question = this.questionRepo.create({
+      ...data,
+      workspace,
+      creator: user,
+    });
+    const exists = await this.questionRepo.findOneBy(data);
+    if (exists) {
+      throw new ConflictException('Workspace title already exists');
+    }
+    try {
+      await this.questionRepo.save(question);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+    return question;
   }
 
-  async getAllQuestions(id: number) {
-    const query = this.repo.createQueryBuilder('question');
-    query.andWhere('question.workspaceId = :workspaceId', { workspaceId: id });
-    const find = await query.getMany();
-    console.log(find);
-    return find;
+  async getAllQuestions(wId: number, user: User) {
+    const questions = await this.questionRepo.find({
+      where: { workspace: { id: wId }, creatorId: user.id },
+    });
+    return questions;
+  }
+
+  async getQuestionById(qid: number, wid: number, user: User) {
+    const question = await this.questionRepo.findOne({
+      where: { id: qid, workspaceId: wid, creatorId: user.id },
+    });
+    if (!question) {
+      throw new NotFoundException(`Question with ID "${qid}" not found`);
+    }
+    return question;
+  }
+
+  async deleteQuestion(qid: number, wid: number, user: User) {
+    const question = await this.questionRepo.findOne({
+      where: { id: qid, workspaceId: wid, creatorId: user.id },
+    });
+    if (!question) {
+      throw new NotFoundException(`Question with ID "${qid}" not found`);
+    }
+    return this.questionRepo.remove(question);
+  }
+
+  async updateQuestion(
+    qid: number,
+    wid: number,
+    user: User,
+    data: Partial<Question>,
+  ) {
+    const question = await this.questionRepo.findOne({
+      where: { id: qid, workspaceId: wid, creatorId: user.id },
+    });
+    if (!question) {
+      throw new NotFoundException(`Question with ID "${qid}" not found`);
+    }
+    await this.questionRepo.update(
+      {
+        id: qid,
+      },
+      data,
+    );
+    return question;
   }
 }

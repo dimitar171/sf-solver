@@ -1,5 +1,12 @@
 import { Workspace } from '../workspaces/workspace.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinTable,
+} from 'typeorm';
+import { User } from 'src/auth/user.entity';
 
 @Entity()
 export class Question {
@@ -16,7 +23,15 @@ export class Question {
     eager: false,
   })
   workspace: Workspace;
-
   @Column()
   workspaceId: number;
+
+  @ManyToOne(() => User)
+  @JoinTable()
+  creator: User;
+
+  @Column()
+  creatorId: number;
+  //CreatedAtDate
+  //Points
 }

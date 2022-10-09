@@ -21,7 +21,6 @@ export class Workspace extends BaseEntity {
   description: string;
 
   @ManyToOne(() => User, (user) => user.workspaces, { eager: false })
-  //join column
   user: User;
   @Column()
   userId: number;
