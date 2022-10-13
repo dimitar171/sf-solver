@@ -24,50 +24,26 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Solver is an app that any long or middle-term project team members can ask and answer questions.
 
-## Installation
+###  Project Timeline
 
-```bash
-$ npm install
-```
+Week 1 (19.09.2022-23.09.2022)
+•	Introduction to the Solver task.
+•	Installing Node and the required tools for the project. 
+•	Generated the NestJS starting project and getting familiar with the framework.
+•	Defining the endpoints for the application, the entities, and the relationship between them.
 
-## Running the app
+Week 2 (26.09.2022-30.09.2022)
+•	Created user and workspace entity.
+•	Setting up basic CRUD functionality for the workspaces module. 
+•	Added persistence to the application
+•	Implemented authentication and authorization with passport (package) and JWT token.
 
-```bash
-# development
-$ npm run start
+Week 3 (3.10.2022-7.10.2022)
+•	Implemented CRUD functionality for the question module. Organized the relationships between user, workspace and question entity.
+•	The application and the database were set up on separate Docker containers.
+•	Implemented a unit and integration test for the GET Workspaces endpoint, to familiarize with testing and JEST package.
+•	Added swagger.
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
