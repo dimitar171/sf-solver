@@ -1,5 +1,7 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -8,6 +10,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -24,7 +27,6 @@ import {
 import { GetUser } from '../auth/get-user.decorator';
 import { User } from '../auth/user.entity';
 import { CreateQuestionDto } from './dto/request/create-question.dto';
-import { CreateQuestionResponseDto } from './dto/response/create-question-response.dto';
 import { Question } from './question.entity';
 import { QuestionsService } from './questions.service';
 
@@ -55,6 +57,8 @@ export class QuestionsController {
 
   @Get()
   @ApiOkResponse({ description: 'Get all questions' })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(50)
   getAllQuestions(
     @Param('workspaceId', ParseIntPipe) id: number,
     @GetUser() user: User,
@@ -65,6 +69,8 @@ export class QuestionsController {
   @Get('/:questionId')
   @ApiOkResponse({ description: 'Get question by id' })
   @ApiNotFoundResponse({ description: 'Question not found' })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   getQuestion(
     @Param('workspaceId', ParseIntPipe) workspaceId: number,
     @Param('questionId', ParseIntPipe) questionId: number,

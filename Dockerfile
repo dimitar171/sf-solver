@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:16.7
 
 # Create app directory, this is in our container/in our image
 WORKDIR /src

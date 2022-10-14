@@ -8,6 +8,9 @@ import {
   ValidationPipe,
   ParseIntPipe,
   UseGuards,
+  UseInterceptors,
+  CacheTTL,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../auth/user.entity';
@@ -46,12 +49,15 @@ export class WorkspacesController {
 
   @Get('/all')
   @ApiOkResponse({ description: 'Get all workspaces' })
+  @UseInterceptors(CacheInterceptor)
   getAllWorkspaces(): Promise<Workspace[]> {
     return this.workspacesService.getAllWorkspaces();
   }
 
   @Get()
   @ApiOkResponse({ description: 'Get all User Workspaces' })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   getUserWorkspaces(@GetUser() user: User): Promise<Workspace[]> {
     return this.workspacesService.getUserWorkspaces(user);
   }
@@ -59,6 +65,8 @@ export class WorkspacesController {
   @Get('/:id')
   @ApiOkResponse({ description: 'Get workspace by Id' })
   @ApiNotFoundResponse({ description: 'Workspace not found' })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   getWorkspaceById(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
