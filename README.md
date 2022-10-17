@@ -45,5 +45,10 @@ Week 3 (3.10.2022-7.10.2022)
 •	The application and the database were set up on separate Docker containers.
 •	Implemented a unit and integration test for the GET Workspaces endpoint, to familiarize with testing and JEST package.
 •	Added swagger.
+Week 4 (10.10.2022-14.10.2022)
+•	Implemented central error handling.
+•	Implemented logging.
+•	Test the application with JMeter
+•	Implemented caching with Redis
 
 
