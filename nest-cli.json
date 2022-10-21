@@ -1,5 +1,58 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "apps/workspaces/src",
+  "monorepo": true,
+  "root": "apps/workspaces",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/workspaces/tsconfig.app.json"
+  },
+  "projects": {
+    "workspaces": {
+      "type": "application",
+      "root": "apps/workspaces",
+      "entryFile": "main",
+      "sourceRoot": "apps/workspaces/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/workspaces/tsconfig.app.json"
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    },
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
+    "questions": {
+      "type": "application",
+      "root": "apps/questions",
+      "entryFile": "main",
+      "sourceRoot": "apps/questions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/questions/tsconfig.app.json"
+      }
+    }
+  }
 }
