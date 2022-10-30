@@ -6,4 +6,7 @@ export class CreateQuestionDto {
 
   @IsNotEmpty()
   description: string;
+
+  @IsNotEmpty()
+  createdBy: string;
 }

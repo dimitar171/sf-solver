@@ -28,9 +28,9 @@ export class QuestionsService {
     return newQuestion;
   }
 
-  async getAllQuestions(id: number) {
+  async getAllQuestions(data: any) {
     return this.questionRepo.find({
-      where: { workspaceId: id },
+      where: { workspaceId: data.id, createdBy: data.creator },
     });
   }
 }

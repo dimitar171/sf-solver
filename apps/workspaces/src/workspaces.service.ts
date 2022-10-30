@@ -14,10 +14,9 @@ export class WorkspacesService {
     @InjectRepository(Workspace) private workspaceRepo: Repository<Workspace>,
   ) {}
 
-  async createWorkspaces(workspace: CreateWorkspaceDto) {
-    const newWorkspace = await this.workspaceRepo.create(workspace);
-
-    const exists = await this.workspaceRepo.findOneBy(workspace);
+  async createWorkspaces(data: CreateWorkspaceDto) {
+    const newWorkspace = await this.workspaceRepo.create(data);
+    const exists = await this.workspaceRepo.findOneBy(data);
     if (exists) {
       throw new ConflictException('Workspace title already exists');
     }
@@ -29,7 +28,10 @@ export class WorkspacesService {
     return newWorkspace;
   }
 
-  async getAllWorkspaces() {
-    return this.workspaceRepo.find();
+  async getAllWorkspaces(data: string) {
+    const found = await this.workspaceRepo.find({
+      where: { createdBy: data },
+    });
+    return found;
   }
 }

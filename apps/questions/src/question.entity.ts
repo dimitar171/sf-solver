@@ -13,4 +13,7 @@ export class Question extends BaseEntity {
 
   @Column()
   workspaceId: number;
+
+  @Column()
+  createdBy: string;
 }

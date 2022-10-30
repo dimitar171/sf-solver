@@ -8,11 +8,13 @@ export class WorkspacesController {
   constructor(private workspacesService: WorkspacesService) {}
 
   @EventPattern('workspace-created')
-  createWorkspace(workspace: CreateWorkspaceDto) {
-    return this.workspacesService.createWorkspaces(workspace);
+  createWorkspace(data: CreateWorkspaceDto) {
+    // console.log(workspace);
+    console.log(data);
+    return this.workspacesService.createWorkspaces(data);
   }
   @MessagePattern({ cmd: 'get-all-workspaces' })
-  getAllWorkspaces() {
-    return this.workspacesService.getAllWorkspaces();
+  getAllWorkspaces(data: string) {
+    return this.workspacesService.getAllWorkspaces(data);
   }
 }

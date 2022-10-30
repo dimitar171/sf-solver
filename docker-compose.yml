@@ -1,12 +1,10 @@
 services:
-  workspaces:
+  api-gateway:
     build:
       context: .
-      dockerfile: ./apps/workspaces/Dockerfile
+      dockerfile: ./apps/api-gateway/Dockerfile
       target: development
-    command: npm run start:dev orders
-    env_file:
-      - ./apps/workspaces/.env
+    command: npm run start:dev api-gateway
     depends_on:
       - rabbitmq
     volumes:
@@ -14,20 +12,42 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3000:3000'
-  questions:
+  auth:
     build:
       context: .
-      dockerfile: ./apps/questions/Dockerfile
+      dockerfile: ./apps/auth/Dockerfile
       target: development
-    command: npm run start:dev billing
-    env_file:
-      - ./apps/questions/.env
+    command: npm run start:dev auth
     depends_on:
       - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
 
+  workspaces:
+    build:
+      context: .
+      dockerfile: ./apps/workspaces/Dockerfile
+      target: development
+    command: npm run start:dev workspaces
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      
+  questions:
+    build:
+      context: .
+      dockerfile: ./apps/questions/Dockerfile
+      target: development
+    command: npm run start:dev questions
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+  
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq

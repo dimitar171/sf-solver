@@ -45,10 +45,24 @@ Week 3 (3.10.2022-7.10.2022)
 •	The application and the database were set up on separate Docker containers.
 •	Implemented a unit and integration test for the GET Workspaces endpoint, to familiarize with testing and JEST package.
 •	Added swagger.
+
 Week 4 (10.10.2022-14.10.2022)
 •	Implemented central error handling.
 •	Implemented logging.
 •	Test the application with JMeter
 •	Implemented caching with Redis
+
+Week 5 (17.10.2022-21.10.2022)
+•	Getting familiar with microservice architecture
+•	Compare diferent NestJS transporters : MQTT, RabbitMQ, Kafka
+•	Create a simple microservice aplication with RabbitMQ as message broker
+
+
+Week 6 (25.10.2022-28.10.2022)
+• Reorganise the Solver aplication into microservices
+• Created microservices: App-Gateway, Auth, Workspaces and Questions with separate DB
+• Dockerise every microservice
+
+
 
 

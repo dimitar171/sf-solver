@@ -6,4 +6,6 @@ export class CreateWorkspaceDto {
 
   @IsNotEmpty()
   description: string;
+  @IsNotEmpty()
+  createdBy: string;
 }

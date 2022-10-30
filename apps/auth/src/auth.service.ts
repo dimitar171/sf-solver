@@ -22,22 +22,22 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto): Promise<void> {
     const { username, password } = createUserDto;
 
-    const user = new User();
-    user.username = username;
-    user.salt = await bcrypt.genSalt();
-    user.password = await bcrypt.hash(password, user.salt);
+    const user1 = new User();
+    user1.username = username;
+    user1.salt = await bcrypt.genSalt();
+    user1.password = await bcrypt.hash(password, user1.salt);
     const exists = await this.repo.findOneBy({ username });
     if (exists) {
       throw new ConflictException('Username already exists');
     }
     try {
-      await this.repo.save(user);
+      await this.repo.save(user1);
     } catch (error) {
       throw new InternalServerErrorException();
     }
   }
 
-  async signIn(createUserDto: CreateUserDto): Promise<{ accessToken: string }> {
+  async signIn(createUserDto: CreateUserDto) {
     const { username, password } = createUserDto;
     const user = await this.repo.findOneBy({ username });
 
@@ -48,5 +48,8 @@ export class AuthService {
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }
+  }
+  async findUser(username: string) {
+    return this.repo.findOneBy({ username });
   }
 }

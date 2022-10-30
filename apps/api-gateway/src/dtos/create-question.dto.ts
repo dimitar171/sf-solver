@@ -8,4 +8,6 @@ export class CreateQuestionDto {
   description: string;
 
   workspaceId: number;
+
+  createdBy: string;
 }

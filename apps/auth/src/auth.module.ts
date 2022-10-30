@@ -16,6 +16,12 @@ import { User } from './user.entity';
         expiresIn: 3600,
       },
     }),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'dbAuth.sqlite',
+      entities: [User],
+      synchronize: true,
+    }),
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [AuthController],

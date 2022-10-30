@@ -10,4 +10,7 @@ export class Workspace extends BaseEntity {
 
   @Column()
   description: string;
+
+  @Column()
+  createdBy: string;
 }

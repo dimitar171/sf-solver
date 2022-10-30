@@ -22,4 +22,4 @@ COPY . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/workspaces/main"]
+CMD ["node", "dist/apps/questions/main"]

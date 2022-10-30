@@ -5,39 +5,62 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ApiGatewayService } from './api-gateway.service';
 import { CreateQuestionDto } from './dtos/create-question.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { CreateWorkspaceDto } from './dtos/create-workspace.dto';
-@Controller('/workspaces')
+@Controller()
 export class ApiGatewayController {
   constructor(private readonly appService: ApiGatewayService) {}
 
-  @Get('/greeting')
-  async getHello() {
-    return this.appService.getHello();
+  @Post('/signup')
+  async signUp(@Body() user: CreateUserDto) {
+    return this.appService.signUp(user);
+  }
+  @Post('/signin')
+  async signIn(@Body() user: CreateUserDto) {
+    return this.appService.signIn(user);
   }
 
-  @Post()
-  async createWorkspaces(@Body() createWorkspace: CreateWorkspaceDto) {
-    return this.appService.createWorkspaces(createWorkspace);
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/workspaces')
+  async createWorkspaces(
+    @Req() request,
+    @Body() createWorkspace: CreateWorkspaceDto,
+  ) {
+    return this.appService.createWorkspaces(request.user, createWorkspace);
   }
 
-  @Get()
-  async getWorkspaces() {
-    return this.appService.getWorkspaces();
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/workspaces')
+  async getWorkspaces(@Req() request) {
+    return this.appService.getWorkspaces(request.user);
   }
 
-  @Post('/:workspaceId/questions')
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/workspaces/:workspaceId/questions')
   async createQuestions(
+    @Req() request,
     @Body() createWorkspace: CreateQuestionDto,
     @Param('workspaceId', ParseIntPipe) workspaceId: number,
   ) {
-    return this.appService.createQuestions(createWorkspace, workspaceId);
+    return this.appService.createQuestions(
+      createWorkspace,
+      workspaceId,
+      request.user,
+    );
   }
 
-  @Get('/:workspaceId/questions')
-  async getQuestions(@Param('workspaceId', ParseIntPipe) workspaceId: number) {
-    return this.appService.getQuestions(workspaceId);
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/workspaces/:workspaceId/questions')
+  async getQuestions(
+    @Req() request,
+    @Param('workspaceId', ParseIntPipe) workspaceId: number,
+  ) {
+    return this.appService.getQuestions(workspaceId, request.user);
   }
 }
