@@ -1,0 +1,4 @@
+rabbitmq:
+  auth:
+    username: user1
+    password: password123

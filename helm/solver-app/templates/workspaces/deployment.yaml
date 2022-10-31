@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workspaces
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workspaces
+  template:
+    metadata:
+      labels:
+        app: workspaces
+    spec:
+      containers:
+        - name: workspaces
+          image: dimitar171/solver-app_workspaces

@@ -8,7 +8,7 @@ async function bootstrap() {
     {
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://rabbitmq:5672'],
+        urls: ['amqp://user1:password123@solver-app-rabbitmq:5672'],
         queue: 'auth_queue',
         queueOptions: {
           durable: false,
